@@ -84,4 +84,4 @@ class Payment(models.Model):
     )
 
     def __str__(self):
-        return "Payment Account - %s" % self.owner
+        return "Payment Account - %s" % self.purchase
