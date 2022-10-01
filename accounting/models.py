@@ -1,9 +1,15 @@
+from wsgiref import validate
 from django.db import models
+from .validators import validar_bancarizacion
+from .validators import validar_monto_negativo
+from .validators import validar_moneda_permitida
+from .validators import validar_code_CRM
+from .validators import  validar_code_ERP
 
 # Create your models here.
 class Client(models.Model):
     #This value is working as a code and comming from the CRM microservice 
-    owner = models.CharField(max_length=100, unique=True)
+    owner = models.CharField(max_length=100, unique=True, validators=[validar_code_CRM])
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     displayName = models.CharField(max_length=100)
@@ -32,9 +38,9 @@ class AccountStatus(models.TextChoices):
 class Account(models.Model):
     client = models.ForeignKey(Client, on_delete = models.CASCADE) 
     bank = models.ForeignKey(Bank, on_delete = models.CASCADE)
-    balance = models.DecimalField(decimal_places=2, max_digits=10)
-    balanceCredit = models.DecimalField(decimal_places=2, max_digits=10)
-    currency = models.CharField(max_length=10)
+    balance = models.DecimalField(decimal_places=2, max_digits=10, validators=[validar_monto_negativo])
+    balanceCredit = models.DecimalField(decimal_places=2, max_digits=10, validators=[validar_monto_negativo])
+    currency = models.CharField(max_length=10, validators=[validar_moneda_permitida])
     status = models.CharField(
         max_length=3,
         choices=AccountStatus.choices,
@@ -53,10 +59,10 @@ class PurchaseStatus(models.TextChoices):
 
 class Purchase(models.Model):
     #This value is working as a code and comming from the ERPSALE microservice 
-    owner = models.CharField(max_length=100, unique=True)
-    amount = models.DecimalField(decimal_places=2, max_digits=10)
-    currency = models.CharField(max_length=10)
-    credit = models.DecimalField(decimal_places=2, max_digits=10)
+    owner = models.CharField(max_length=100, unique=True, validators=[validar_code_ERP])
+    amount = models.DecimalField(decimal_places=2, max_digits=10, validators=[validar_monto_negativo, validar_bancarizacion])
+    currency = models.CharField(max_length=10, validators=[validar_moneda_permitida])
+    credit = models.DecimalField(decimal_places=2, max_digits=10, validators=[validar_monto_negativo])
     status = models.CharField(
         max_length=3,
         choices=PurchaseStatus.choices,
@@ -74,9 +80,9 @@ class PaymentStatus(models.TextChoices):
 class Payment(models.Model):
     purchase = models.ForeignKey(Purchase, on_delete = models.CASCADE) 
     account = models.ForeignKey(Account, on_delete = models.CASCADE)
-    pay = models.DecimalField(decimal_places=2, max_digits=10)
-    balance = models.DecimalField(decimal_places=2, max_digits=10)
-    currency = models.CharField(max_length=10)
+    pay = models.DecimalField(decimal_places=2, max_digits=10, validators=[validar_monto_negativo, validar_bancarizacion])
+    balance = models.DecimalField(decimal_places=2, max_digits=10, validators=[validar_monto_negativo])
+    currency = models.CharField(max_length=10, validators=[validar_moneda_permitida])
     status = models.CharField(
         max_length=3,
         choices=PaymentStatus.choices,
