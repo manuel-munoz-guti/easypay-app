@@ -9,7 +9,7 @@ from .validators import  validar_code_ERP
 # Create your models here.
 class Client(models.Model):
     #This value is working as a code and comming from the CRM microservice 
-    owner = models.CharField(max_length=100, unique=True, validators=[validar_code_CRM])
+    owner = models.CharField(max_length=100, unique=True, validators=[validar_code_CRM,])
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     displayName = models.CharField(max_length=100)
