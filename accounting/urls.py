@@ -11,5 +11,6 @@ router.register(r"accounts", views.AccountViewSet)
 router.register(r"payments", views.PaymentViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('payments/completed_list', views.payments_completed),
+    path('', include(router.urls))
 ]

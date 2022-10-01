@@ -29,3 +29,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = "__all__"
+
+class ReportePaymentsSerializer(serializers.Serializer):
+    cantidad = serializers.IntegerField()
+    payments = PaymentSerializer(many=True)
