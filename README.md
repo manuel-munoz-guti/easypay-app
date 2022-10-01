@@ -30,5 +30,8 @@ pass: holacasaagua
         "accounts": "http://127.0.0.1:8000/accounting/accounts/",
         "payments": "http://127.0.0.1:8000/accounting/payments/"
      
-- Utilice Django Rest Framework para crear al menos 1 Custom API
-- Debe incluir el archivo requirements.txt en la raíz del repositorio
+- Creamos un Custom API
+    SWAGGER: http://127.0.0.1:8000/swagger/
+       
+
+- El proyecto incluye el archivo requirements.txt en la raíz del repositorio
